@@ -9,8 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class DriverSetupUtility {
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    public static WebDriver initDriver()
-    {
+    public static WebDriver initDriver() {
 
         String browser = ConfigReaderUtility.getBrowser().toLowerCase();
 
@@ -35,18 +34,15 @@ public class DriverSetupUtility {
             default:
                 throw new RuntimeException("Invalid browser: " + browser);
         }
-
         driver.get().manage().window().maximize();
         return driver.get();
     }
 
-    public static WebDriver getDriver()
-    {
+    public static WebDriver getDriver() {
         return driver.get();
     }
 
-    public static void quitDriver()
-    {
+    public static void quitDriver() {
         if (driver.get() != null) {
             driver.get().quit();
             driver.remove();

@@ -9,7 +9,7 @@ import io.cucumber.java.Before;
 public class TestHooks {
     @Before
     public void setup() {
-        String url = ConfigReaderUtility.geturl();
+        String url = ConfigReaderUtility.getUrl();
         DriverSetupUtility.initDriver().get(url);
     }
 

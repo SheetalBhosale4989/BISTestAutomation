@@ -5,33 +5,33 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReaderUtility {
-    private static Properties prop = new Properties();
-    private static final String ConfigFilePath = "src/test/resources/config.properties";
+    private static Properties properties = new Properties();
+    private static final String CONFIG_FILE_PATH = "src/test/resources/config.properties";
+
     static {
         try {
 
-            FileInputStream fileInputStream = new FileInputStream(ConfigFilePath);
-            prop.load(fileInputStream);
+            FileInputStream fileInputStream = new FileInputStream(CONFIG_FILE_PATH);
+            properties.load(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to load "+ConfigFilePath);
+            throw new RuntimeException("Failed to load " + CONFIG_FILE_PATH);
         }
     }
 
-    public static String get(String key)
-    {
-        String value = prop.getProperty(key);
+    public static String get(String key) {
+        String value = properties.getProperty(key);
         if (value == null) {
-            throw new RuntimeException(key + " not found in "+ConfigFilePath);
+            throw new RuntimeException(key + " not found in " + CONFIG_FILE_PATH);
         }
         return value;
     }
-    public static String getBrowser()
-    {
+
+    public static String getBrowser() {
         return System.getProperty("browser", get("browser"));
     }
-    public static String geturl()
-    {
+
+    public static String getUrl() {
         return System.getProperty("url", get("url"));
     }
 }
