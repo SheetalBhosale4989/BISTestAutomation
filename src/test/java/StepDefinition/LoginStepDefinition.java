@@ -31,9 +31,11 @@ public class LoginStepDefinition {
 
     @Then("user should see {string}")
     public void verifyLoginStatus(String loginStatus) {
+        boolean isTabsVisible = homepage.isTabsVisible();
         boolean isLoginSuccessful = homepage.isLogoutBtnVisible();
-        if (isLoginSuccessful) {
+        if (isTabsVisible && isLoginSuccessful) {
             Assert.assertTrue(homepage.isLogoutBtnVisible(), loginStatus);
+            Assert.assertTrue(homepage.isTabsVisible(), loginStatus);
         }
     }
 

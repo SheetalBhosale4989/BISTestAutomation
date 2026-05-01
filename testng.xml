@@ -1,7 +1,7 @@
 <suite name="BISTestAutomation" parallel="methods" thread-count="1">
     <test name="Test1">
         <classes>
-
+            <parameter name="browser" value="firefox"/>
             <class name="runner.TestRunner"/>
         </classes>
     </test>
