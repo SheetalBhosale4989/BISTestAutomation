@@ -6,18 +6,13 @@ import Pages.QueueDetailPage;
 import Pages.QueuesAndStreamsPage;
 import api.MessageSpecification;
 import api.PublishMessagePojo;
-import core.ConfigReaderUtility;
 import core.DriverSetupUtility;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-
-import java.util.List;
 
 public class MessageQueueStepDefinition {
     WebDriver driver = DriverSetupUtility.getDriver();
@@ -29,11 +24,7 @@ public class MessageQueueStepDefinition {
 
     @Given("User is logged in with valid credentials")
     public void login() {
-        String url = ConfigReaderUtility.getUrl();
-        driver.get(url);
-        loginPage.enterUsername(ConfigReaderUtility.get("username"));
-        loginPage.enterPassword(ConfigReaderUtility.get("password"));
-        loginPage.clickLoginButton();
+        loginPage.login();
     }
 
     @And("message is published to queue")
@@ -54,12 +45,13 @@ public class MessageQueueStepDefinition {
 
     @And("user clicks on Queue")
     public void clickOnQueue() {
-        queuesAndStreamsPage.clickQueueElement(message.getRouting_key());
+        Assert.assertTrue(queuesAndStreamsPage.clickQueueElement(message.getRouting_key()));
     }
 
+    //TODO - Acknowledge message and check if Queue is empty
     @And("user fetches a message by clicking on Get message button")
     public void fetchMessage() {
-        queueDetailPage.clickGetMessage();
+        Assert.assertTrue(queueDetailPage.clickGetMessage());
     }
 
     @Then("message should be visible")
@@ -67,5 +59,10 @@ public class MessageQueueStepDefinition {
         String messagePayload = queueDetailPage.getMessage();
         System.out.println("message is " + messagePayload);
         Assert.assertEquals(messagePayload, message.getPayload());
+    }
+
+    @And("user deletes Queue")
+    public void deleteQueue() {
+        Assert.assertTrue(queueDetailPage.deleteQueue());
     }
 }

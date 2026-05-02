@@ -1,5 +1,6 @@
 package Pages;
 
+import core.ConfigReaderUtility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -26,6 +27,13 @@ public class LoginPage {
 
     public void clickLoginButton() {
         driver.findElement(loginButton).click();
+    }
+
+    public void login() {
+        driver.get(ConfigReaderUtility.get("url"));
+        enterUsername(ConfigReaderUtility.get("username"));
+        enterPassword(ConfigReaderUtility.get("password"));
+        clickLoginButton();
     }
 
     public String getErrorMessage() {

@@ -1,8 +1,6 @@
 Feature: Message Queue Test
 
-#  Background: User is logged in with valid credentials
-
-  @debug
+#  @debug
   Scenario: Enqueue and Dequeue a message
     Given User is logged in with valid credentials
     And message is published to queue
@@ -10,3 +8,5 @@ Feature: Message Queue Test
     And user clicks on Queue
     And user fetches a message by clicking on Get message button
     Then message should be visible
+#    And user deletes Queue
+

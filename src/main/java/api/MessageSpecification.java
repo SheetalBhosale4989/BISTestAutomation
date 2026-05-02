@@ -34,7 +34,7 @@ public class MessageSpecification {
             message.setRouting_key(createQueue());
             message.setPayload("Hello from API!");
             message.setPayload_encoding("string");
-            message.setProperties(new HashMap<String, Object>());
+            message.setProperties(new HashMap<>());
 
             String virtualHost = URLEncoder.encode(message.getVhost(), StandardCharsets.UTF_8);
             Response response = RestAssured
@@ -57,9 +57,9 @@ public class MessageSpecification {
     }
 
     public static String createQueue() throws Exception {
-        String requestBody = """
-                {"durable": true}
-                """;
+        CreateQueuePojo createQueuePojo = new CreateQueuePojo();
+        createQueuePojo.setDurable(true);
+        createQueuePojo.setAuto_delete(false);
 
         String virtualHost = URLEncoder.encode(ConfigReaderUtility.get("virtual_host"), StandardCharsets.UTF_8);
 
@@ -71,7 +71,7 @@ public class MessageSpecification {
         Response response = RestAssured
                 .given()
                 .spec(spec)
-                .body(requestBody)
+                .body(createQueuePojo)
                 .when()
                 .urlEncodingEnabled(false)
                 .put("api/queues/" + virtualHost + "/" + queueName)

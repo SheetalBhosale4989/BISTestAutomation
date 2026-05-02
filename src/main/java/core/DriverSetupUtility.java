@@ -43,7 +43,7 @@ public class DriverSetupUtility {
                 options.addArguments("--disable-features=AutofillEnableAccountWalletStorage");
                 options.addArguments("--disable-save-password-bubble");
 
-// Disable Safe Browsing (this is what stops the popup)
+// Disable Safe Browsing to stop the popup
                 options.addArguments("--safebrowsing-disable-auto-update");
                 options.addArguments("--disable-features=SafetyCheck");
                 options.addArguments("--disable-features=SecurityInterstitials");
