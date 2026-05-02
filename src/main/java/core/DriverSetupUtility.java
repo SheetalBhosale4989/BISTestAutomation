@@ -51,12 +51,6 @@ public class DriverSetupUtility {
 
                 driver.set(new ChromeDriver(options));
                 break;
-
-            case "firefox":
-                WebDriverManager.firefoxdriver().setup();
-                driver.set(new FirefoxDriver());
-                break;
-
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 driver.set(new EdgeDriver());

@@ -32,7 +32,7 @@ public class MessageQueueStepDefinition {
         try {
             message = MessageSpecification.publishMessage(message);
         } catch (Exception e) {
-            System.out.println("Error occurred while publishing - " + e.getMessage());
+            throw new RuntimeException("Failed to publish message: " + e.getMessage(), e);
         }
     }
 
@@ -46,9 +46,19 @@ public class MessageQueueStepDefinition {
     @And("user clicks on Queue")
     public void clickOnQueue() {
         Assert.assertTrue(queuesAndStreamsPage.clickQueueElement(message.getRouting_key()));
+        Assert.assertEquals(queueDetailPage.getQueueName(), message.getRouting_key());
     }
 
-    //TODO - Acknowledge message and check if Queue is empty
+    @And("user clicks on Get messages header")
+    public void userClicksOnGetMessagesHeader() {
+        Assert.assertTrue(queueDetailPage.userClicksOnGetMessagesHeader());
+    }
+
+    @And("user selects automatic acknowledgement mode")
+    public void selectAutomaticAcknowledgment() {
+        Assert.assertTrue(queueDetailPage.selectAutomaticAckMode());
+    }
+
     @And("user fetches a message by clicking on Get message button")
     public void fetchMessage() {
         Assert.assertTrue(queueDetailPage.clickGetMessage());
@@ -59,6 +69,12 @@ public class MessageQueueStepDefinition {
         String messagePayload = queueDetailPage.getMessage();
         System.out.println("message is " + messagePayload);
         Assert.assertEquals(messagePayload, message.getPayload());
+    }
+
+    @And("verify zero messages remaining")
+    public void verifyNumberOfMessagesInQueue() {
+        String message = queueDetailPage.verifyNumberOfMessagesInQueue();
+        Assert.assertEquals(message, "The server reported 0 messages remaining.");
     }
 
     @And("user deletes Queue")

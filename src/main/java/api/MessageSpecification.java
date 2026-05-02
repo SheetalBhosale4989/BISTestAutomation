@@ -1,10 +1,12 @@
 package api;
 
+import Utilities.JsonUtilities;
 import core.ConfigReaderUtility;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,16 +28,13 @@ public class MessageSpecification {
                 .build();
     }
 
-    //TODO - create exchange. use json file to load request body.
     public static PublishMessagePojo publishMessage(PublishMessagePojo message) throws Exception {
         try {
-            message.setVhost(ConfigReaderUtility.get("virtual_host"));
-            message.setName("amq.default");
+            String payloadMessage = "Automated Test Message " +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+            message = JsonUtilities.readJsonAsObject("src/test/resources/payloads/PublishMessage.json", PublishMessagePojo.class);
             message.setRouting_key(createQueue());
-            message.setPayload("Hello from API!");
-            message.setPayload_encoding("string");
-            message.setProperties(new HashMap<>());
-
+            message.setPayload(payloadMessage);
             String virtualHost = URLEncoder.encode(message.getVhost(), StandardCharsets.UTF_8);
             Response response = RestAssured
                     .given()
@@ -47,8 +46,16 @@ public class MessageSpecification {
                     .then()
                     .extract()
                     .response();
-            System.out.println("Status code " + response.statusCode());
-            System.out.println("Response " + response.asString());
+
+            if (response.statusCode() != 200) {
+                throw new Exception("Error while receiving response for publishing message.");
+            }
+
+            boolean routed = response.jsonPath().getBoolean("routed");
+            if (!routed) {
+                throw new Exception("Error while publishing message - not routed.");
+            }
+
             return message;
         } catch (Exception e) {
             System.out.println("Error occurred while publishing - " + e.getMessage());
@@ -57,10 +64,12 @@ public class MessageSpecification {
     }
 
     public static String createQueue() throws Exception {
-        CreateQueuePojo createQueuePojo = new CreateQueuePojo();
-        createQueuePojo.setDurable(true);
-        createQueuePojo.setAuto_delete(false);
 
+        CreateQueuePojo createQueuePojo =
+                JsonUtilities.readJsonAsObject(
+                        "src/test/resources/payloads/CreateQueue.json",
+                        CreateQueuePojo.class
+                );
         String virtualHost = URLEncoder.encode(ConfigReaderUtility.get("virtual_host"), StandardCharsets.UTF_8);
 
         String queueName = URLEncoder.encode("AutomationTest" + LocalDateTime.now()
@@ -82,7 +91,6 @@ public class MessageSpecification {
         if (response.statusCode() != 201) {
             throw new Exception("Error while creating queue");
         }
-
 
         return queueName;
     }
