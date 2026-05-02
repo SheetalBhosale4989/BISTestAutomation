@@ -6,14 +6,12 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class MessageSpecification {
     private static final RequestSpecification spec;
@@ -28,11 +26,11 @@ public class MessageSpecification {
                 .build();
     }
 
-    public static PublishMessagePojo publishMessage(PublishMessagePojo message) throws Exception {
+    public static PublishMessagePojo publishMessage() throws Exception {
         try {
             String payloadMessage = "Automated Test Message " +
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-            message = JsonUtilities.readJsonAsObject("src/test/resources/payloads/PublishMessage.json", PublishMessagePojo.class);
+            PublishMessagePojo message = JsonUtilities.readJsonAsObject("src/test/resources/payloads/PublishMessage.json", PublishMessagePojo.class);
             message.setRouting_key(createQueue());
             message.setPayload(payloadMessage);
             String virtualHost = URLEncoder.encode(message.getVhost(), StandardCharsets.UTF_8);
@@ -64,13 +62,14 @@ public class MessageSpecification {
     }
 
     public static String createQueue() throws Exception {
-
         CreateQueuePojo createQueuePojo =
                 JsonUtilities.readJsonAsObject(
                         "src/test/resources/payloads/CreateQueue.json",
                         CreateQueuePojo.class
                 );
-        String virtualHost = URLEncoder.encode(ConfigReaderUtility.get("virtual_host"), StandardCharsets.UTF_8);
+        PublishMessagePojo message = JsonUtilities.readJsonAsObject("src/test/resources/payloads/PublishMessage.json", PublishMessagePojo.class);
+
+        String virtualHost = URLEncoder.encode(message.getVhost(), StandardCharsets.UTF_8);
 
         String queueName = URLEncoder.encode("AutomationTest" + LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")), StandardCharsets.UTF_8);
@@ -94,5 +93,4 @@ public class MessageSpecification {
 
         return queueName;
     }
-
 }

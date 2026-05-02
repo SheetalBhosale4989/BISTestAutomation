@@ -7,7 +7,6 @@ import java.io.File;
 public class JsonUtilities {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    // Generic method to convert JSON to POJO
     public static <T> T readJsonAsObject(String filePath, Class<T> pojClass) {
         try {
             return mapper.readValue(new File(filePath), pojClass);

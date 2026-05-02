@@ -11,7 +11,6 @@ import java.time.Duration;
 public class WaitUtility {
     private static final int EXPLICIT_TIMEOUT = 30;
 
-
     public static void setImplicitWait(WebDriver driver, int seconds) {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
     }

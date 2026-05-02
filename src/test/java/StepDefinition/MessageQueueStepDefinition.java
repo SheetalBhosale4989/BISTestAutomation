@@ -30,7 +30,7 @@ public class MessageQueueStepDefinition {
     @And("message is published to queue")
     public void publishMessageToQueue() {
         try {
-            message = MessageSpecification.publishMessage(message);
+            message = MessageSpecification.publishMessage();
         } catch (Exception e) {
             throw new RuntimeException("Failed to publish message: " + e.getMessage(), e);
         }
