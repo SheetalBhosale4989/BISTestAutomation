@@ -1,3 +1,4 @@
+@order=2
 Feature: Message Queue Test
 
 # @debug
