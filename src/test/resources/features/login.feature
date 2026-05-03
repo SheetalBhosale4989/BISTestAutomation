@@ -1,6 +1,6 @@
 Feature: Verify login
 
-  @sequence=1
+
   Scenario Outline: Validate user is able to login with valid credentials
     Given user is on login page
     When user logs in with username "<username>" and password "<password>"
@@ -10,7 +10,7 @@ Feature: Verify login
       | username | password | loginstatus      |
       | guest    | guest    | login successful |
 
-  @sequence=2
+
   Scenario Outline: Validate user is able to login with invalid credentials
     Given user is on login page
     When user logs in with username "<username>" and password "<password>"

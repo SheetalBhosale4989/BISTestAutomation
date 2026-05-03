@@ -1,5 +1,6 @@
 package Pages;
 
+import Utilities.WaitUtility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,14 +45,12 @@ public class HomePage {
     }
 
     public boolean isLogoutBtnVisible() {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(logoutButton));
+        WaitUtility.waitForVisible(driver, logoutButton);
         return driver.findElement(logoutButton).isDisplayed();
     }
 
     public boolean isTabsVisible() {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tabs));
+        WaitUtility.waitForVisible(driver, tabs);
         return driver.findElement(tabs).isDisplayed();
     }
 }

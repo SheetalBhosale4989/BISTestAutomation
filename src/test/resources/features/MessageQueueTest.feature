@@ -1,7 +1,6 @@
 Feature: Message Queue Test
 
 # @debug
-  @sequence=3
   Scenario: Enqueue and Dequeue a message
     Given User is logged in with valid credentials
     And message is published to queue
