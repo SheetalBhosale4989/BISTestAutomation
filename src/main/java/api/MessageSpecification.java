@@ -14,17 +14,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class MessageSpecification {
-    private static final RequestSpecification spec;
-
-    static {
-        spec = new RequestSpecBuilder()
-                .setBaseUri(ConfigReaderUtility.get("url"))
-                .setContentType("application/json")
-                .setAuth(RestAssured.basic(
-                        ConfigReaderUtility.get("username"),
-                        ConfigReaderUtility.get("password")))
-                .build();
-    }
 
     public static PublishMessagePojo publishMessage() throws Exception {
         try {
@@ -36,7 +25,7 @@ public class MessageSpecification {
             String virtualHost = URLEncoder.encode(message.getVhost(), StandardCharsets.UTF_8);
             Response response = RestAssured
                     .given()
-                    .spec(spec)
+                    .spec(RequestSpecUtility.getSpec())
                     .body(message)
                     .when()
                     .urlEncodingEnabled(false)
@@ -78,7 +67,7 @@ public class MessageSpecification {
 
         Response response = RestAssured
                 .given()
-                .spec(spec)
+                .spec(RequestSpecUtility.getSpec())
                 .body(createQueuePojo)
                 .when()
                 .urlEncodingEnabled(false)
