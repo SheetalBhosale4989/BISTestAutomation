@@ -24,6 +24,8 @@ public class DriverSetupUtility {
 
                 ChromeOptions options = new ChromeOptions();
                 options.setExperimentalOption("prefs", prefs);
+                options.addArguments("--headless=new");
+
 
                 driver.set(new ChromeDriver(options));
                 break;
