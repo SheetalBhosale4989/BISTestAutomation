@@ -20,11 +20,17 @@ public class DriverSetupUtility {
                 WebDriverManager.chromedriver().setup();
 
                 Map<String, Object> prefs = new HashMap<>();
-                prefs.put("profile.password_manager_leak_detection", false);
 
                 ChromeOptions options = new ChromeOptions();
-                options.setExperimentalOption("prefs", prefs);
                 options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
+
+                // Optional but recommended
+                options.addArguments("--remote-allow-origins=*");
+                prefs.put("profile.password_manager_leak_detection", false);
+                options.setExperimentalOption("prefs", prefs);
 
 
                 driver.set(new ChromeDriver(options));
